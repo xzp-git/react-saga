@@ -1,6 +1,11 @@
+import React from "react";
+import ReactDOM from "react-dom";
+import Counter from "./components/Counter";
+import { Provider } from "react-redux";
 import store from "./store";
 
-
-console.log(store.getState());
-
-
+ReactDOM.render(
+<Provider store={store}>
+    <Counter />
+</Provider>
+,document.getElementById('root'))
