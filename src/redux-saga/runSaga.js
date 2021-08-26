@@ -10,8 +10,17 @@ import * as effectTypes from "./effectTypes";
 function runSaga(env,saga) {
     let {getState, dispatch, channel} = env
     let it = typeof saga === 'function'? saga() : saga //执行生成器，范湖迭代器
-    function next(value) {
-        let  {value:effect, done} = it.next(value)
+    function next(value,isError) {
+
+        let result
+
+        if(isError){
+            result = it.throw(value)
+        }else{
+            result = it.next(value)
+        }
+
+        let  {value:effect, done} = result
                 //{type:effectTypes.TAKE, actionType}
         if (!done) {
             if (typeof effect[Symbol.iterator] === 'function') {
@@ -30,7 +39,19 @@ function runSaga(env,saga) {
                         runSaga(env, effect.saga)
                         next()
                         break;
-                    default:
+                    case effectTypes.CALL:
+                        effect.fn(...effect.args).then(next)
+                        break
+                    case effectTypes.CPS:
+                        effect.fn(...effect.args,(err,data)=>{
+                            if (err) {
+                                next(err,true)
+                            }else{
+                                next(data)
+                            }
+                        })
+                        break
+                default:
                         break;
                 }
             }
