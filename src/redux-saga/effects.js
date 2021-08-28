@@ -42,3 +42,7 @@ export function call(fn,...args) {
 export function cps(fn,...args) {
     return {type:effectTypes.CPS, fn, args}
 }
+
+export function all(effects) {
+    return {type:effectTypes.ALL,  effects}
+}

@@ -13,3 +13,5 @@ export const CALL = 'CALL'
 
 // 调用一个函数，此函数的最后一个参数应该是一个callback 调用callback
 export const CPS = 'CPS'
+
+export const ALL = 'ALL'

@@ -7,7 +7,7 @@ import * as effectTypes from "./effectTypes";
  */
 
 
-function runSaga(env,saga) {
+function runSaga(env,saga,doneCallback) {
     let {getState, dispatch, channel} = env
     let it = typeof saga === 'function'? saga() : saga //执行生成器，范湖迭代器
     function next(value,isError) {
@@ -51,11 +51,28 @@ function runSaga(env,saga) {
                             }
                         })
                         break
+                    case effectTypes.ALL:
+                        let effects = effect.effects
+                        let result = []
+                        let completedCount = 0
+                        effects.forEach((effect,index) => {
+                            runSaga(env,effect,(res) => {
+                                result[index] = res
+                                if (++completedCount === effects.length){
+                                    next(result)
+                                }
+                            })
+                        });
+                        break
                 default:
                         break;
                 }
             }
             
+        }else{
+
+            // done为true 说明整个saga 结束
+            doneCallback && doneCallback(effect)
         }
     }
     next()
