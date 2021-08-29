@@ -46,3 +46,16 @@ export function cps(fn,...args) {
 export function all(effects) {
     return {type:effectTypes.ALL,  effects}
 }
+
+export function cancel(task) {
+    return {type:effectTypes.CANCEL,  task}
+}
+
+function delayP(ms, value = true) {
+    const promise = new Promise(resolve => {
+        setTimeout(resolve,ms,value)
+    })
+    return promise
+}
+
+export const delay = call.bind(null,delayP)
