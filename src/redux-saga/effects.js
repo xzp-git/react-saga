@@ -43,6 +43,10 @@ export function cps(fn,...args) {
     return {type:effectTypes.CPS, fn, args}
 }
 
+export function select(selctor) {
+    return {type:effectTypes.SELECT,selctor}
+}
+
 export function all(effects) {
     return {type:effectTypes.ALL,  effects}
 }

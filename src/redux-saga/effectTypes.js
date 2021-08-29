@@ -16,3 +16,4 @@ export const CPS = 'CPS'
 
 export const ALL = 'ALL'
 export const CANCEL = 'CANCEL'
+export const SELECT = 'SELECT'

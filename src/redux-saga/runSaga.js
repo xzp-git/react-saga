@@ -79,6 +79,10 @@ function runSaga(env,saga,doneCallback) {
                         effect.task.cancel() //调用这个task的cancel方法
                         next()
                         break
+                    case effectTypes.SELECT:
+                        let state = effect.selector(getState())
+                        next(state)
+                        break
                 default:
                         break;
                 }
